@@ -1,7 +1,9 @@
-const CACHE_NAME = 'score-keeper-cache-v1';
+const CACHE_NAME = 'score-keeper-cache-v8';
 const urlsToCache = [
   '/',
   '/index.html',
+  '/manifest.json',
+  '/vite.svg',
   '/index.tsx',
   '/App.tsx',
   '/types.ts',
