@@ -1,0 +1,5 @@
+{
+  "name": "4-Player Score Keeper",
+  "description": "A simple and colorful mobile-friendly app to keep score for a 4-player game. Tap to add or subtract points for each player and reset the game when you're done.",
+  "requestFramePermissions": []
+}
