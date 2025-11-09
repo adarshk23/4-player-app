@@ -1,4 +1,4 @@
-const CACHE_NAME = 'score-keeper-cache-v11';
+const CACHE_NAME = 'score-keeper-cache-v12';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -14,7 +14,8 @@ const urlsToCache = [
   'https://cdn.tailwindcss.com',
   'https://esm.sh/react@18.2.0',
   'https://esm.sh/react-dom@18.2.0/client',
-  'https://images.unsplash.com/photo-1524293581270-99431958042d?q=80&w=1974&auto=format&fit=crop'
+  'https://images.unsplash.com/photo-1524293581270-99431958042d?q=80&w=1974&auto=format&fit=crop',
+  'https://unpkg.com/@babel/standalone/babel.min.js'
 ];
 
 // Install the service worker and cache the static assets
