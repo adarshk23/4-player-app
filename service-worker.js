@@ -1,4 +1,4 @@
-const CACHE_NAME = 'score-keeper-cache-v9';
+const CACHE_NAME = 'score-keeper-cache-v10';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -27,20 +27,32 @@ self.addEventListener('install', event => {
   );
 });
 
-// Serve cached content when offline
+// Serve content using a more intelligent caching strategy
 self.addEventListener('fetch', event => {
+  const requestUrl = new URL(event.request.url);
+
+  // For TS/TSX files, try network first to get the latest transpiled version.
+  // This is crucial for environments that transpile on the fly.
+  // Fall back to cache only for offline access.
+  if (requestUrl.pathname.endsWith('.tsx') || requestUrl.pathname.endsWith('.ts')) {
+    event.respondWith(
+      fetch(event.request).catch(() => {
+        return caches.match(event.request);
+      })
+    );
+    return;
+  }
+
+  // For all other requests (HTML, CSS, images), use a cache-first strategy
+  // for speed and offline reliability.
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // If the request is in the cache, return it
-        if (response) {
-          return response;
-        }
-        // Otherwise, fetch the request from the network
-        return fetch(event.request);
+        return response || fetch(event.request);
       })
   );
 });
+
 
 // Clean up old caches
 self.addEventListener('activate', event => {
@@ -50,6 +62,7 @@ self.addEventListener('activate', event => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
+            console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
