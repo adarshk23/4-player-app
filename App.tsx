@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Player } from './types';
 import PlayerCard from './components/PlayerCard';
+import Leaderboard from './components/Leaderboard';
 import { RotateCcwIcon } from './components/icons';
 
 const initialPlayers: Player[] = [
@@ -53,6 +54,8 @@ const initialPlayers: Player[] = [
 const App: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
+  const [finalScores, setFinalScores] = useState<Player[] | null>(null);
 
   const handleScoreChange = (playerId: number, amount: number) => {
     setPlayers(prevPlayers =>
@@ -72,11 +75,19 @@ const App: React.FC = () => {
     );
   };
 
-  const confirmResetScores = () => {
+  const showLeaderboard = () => {
+    const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+    setFinalScores(sortedPlayers);
+    setIsLeaderboardOpen(true);
+    setIsResetModalOpen(false);
+  };
+
+  const startNewGame = () => {
     setPlayers(prevPlayers =>
       prevPlayers.map(player => ({ ...player, score: 0 }))
     );
-    setIsResetModalOpen(false);
+    setIsLeaderboardOpen(false);
+    setFinalScores(null);
   };
 
   const scores = players.map(p => p.score);
@@ -125,7 +136,7 @@ const App: React.FC = () => {
           >
             <div className="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm text-center border border-gray-700">
               <h2 className="text-2xl font-bold mb-4">Reset Scores?</h2>
-              <p className="text-gray-400 mb-6">Are you sure you want to reset all scores to zero? This action cannot be undone.</p>
+              <p className="text-gray-400 mb-6">This will end the current game and show the final scores.</p>
               <div className="flex justify-center gap-4">
                 <button
                   onClick={() => setIsResetModalOpen(false)}
@@ -134,7 +145,7 @@ const App: React.FC = () => {
                   Cancel
                 </button>
                 <button
-                  onClick={confirmResetScores}
+                  onClick={showLeaderboard}
                   className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-red-500"
                 >
                   Reset
@@ -142,6 +153,10 @@ const App: React.FC = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {isLeaderboardOpen && finalScores && (
+          <Leaderboard players={finalScores} onClose={startNewGame} />
         )}
       </div>
     </div>

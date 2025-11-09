@@ -1,4 +1,4 @@
-const CACHE_NAME = 'score-keeper-cache-v10';
+const CACHE_NAME = 'score-keeper-cache-v11';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -10,6 +10,7 @@ const urlsToCache = [
   '/components/PlayerCard.tsx',
   '/components/ScoreButton.tsx',
   '/components/icons.tsx',
+  '/components/Leaderboard.tsx',
   'https://cdn.tailwindcss.com',
   'https://esm.sh/react@18.2.0',
   'https://esm.sh/react-dom@18.2.0/client',
